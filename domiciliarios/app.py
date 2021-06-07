@@ -11,7 +11,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 db = SQLAlchemy(app)
 
-class producto(db.Model):
+class domiciliario(db.Model):
     id = db.Column('user_id', db.Integer, primary_key=True)
     domiciliario_nombre = db.Column(db.String(100))
     domiciliario_empresa = db.Column(db.String(100))
@@ -23,7 +23,7 @@ class producto(db.Model):
 @app.route('/')
 @cross_origin()
 def principal():
-    data = producto.query.all()
+    data = domiciliario.query.all()
     diccionario_domiciliarios = {}
     for d in data:
         p = { 
@@ -42,7 +42,7 @@ def agregar(nombre, empresa):
         "nombre": nombre,
         "empresa": empresa,
         }
-    p = producto(datos)
+    p = domiciliario(datos)
     db.session.add(p)
     db.session.commit()
     return redirect(url_for('principal'))
@@ -50,7 +50,7 @@ def agregar(nombre, empresa):
 @app.route('/eliminar/<int:id>')
 @cross_origin()
 def eliminar(id):
-    p = producto.query.filter_by(id=id).first()
+    p = domiciliario.query.filter_by(id=id).first()
     db.session.delete(p)
     db.session.commit()
     return redirect(url_for('principal'))
@@ -58,7 +58,7 @@ def eliminar(id):
 @app.route('/actualizar/<int:id>/<nombre>/<empresa>')
 @cross_origin()
 def actualizar(id, nombre, empresa):
-    p = producto.query.filter_by(id=id).first()
+    p = domiciliario.query.filter_by(id=id).first()
     p.domiciliario_nombre = nombre
     p.domiciliario_empresa = empresa
     db.session.commit()
@@ -67,7 +67,7 @@ def actualizar(id, nombre, empresa):
 @app.route('/buscar/<int:id>')
 @cross_origin()
 def buscar(id):
-    d = producto.query.filter_by(id=id).first()
+    d = domiciliario.query.filter_by(id=id).first()
     p = { 
         'id': d.id,
         'nombre': d.domiciliario_nombre,

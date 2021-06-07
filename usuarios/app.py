@@ -11,7 +11,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 db = SQLAlchemy(app)
 
-class producto(db.Model):
+class usuario(db.Model):
     id = db.Column('user_id', db.Integer, primary_key=True)
     usuario_nombre = db.Column(db.String(100))
     usuario_direccion = db.Column(db.String(100))
@@ -23,7 +23,7 @@ class producto(db.Model):
 @app.route('/')
 @cross_origin()
 def principal():
-    data = producto.query.all()
+    data = usuario.query.all()
     diccionario_usuarios = {}
     for d in data:
         p = { 
@@ -42,7 +42,7 @@ def agregar(nombre, direccion):
         "nombre": nombre,
         "direccion": direccion,
         }
-    p = producto(datos)
+    p = usuario(datos)
     db.session.add(p)
     db.session.commit()
     return redirect(url_for('principal'))
@@ -50,7 +50,7 @@ def agregar(nombre, direccion):
 @app.route('/eliminar/<int:id>')
 @cross_origin()
 def eliminar(id):
-    p = producto.query.filter_by(id=id).first()
+    p = usuario.query.filter_by(id=id).first()
     db.session.delete(p)
     db.session.commit()
     return redirect(url_for('principal'))
@@ -58,7 +58,7 @@ def eliminar(id):
 @app.route('/actualizar/<int:id>/<nombre>/<direccion>')
 @cross_origin()
 def actualizar(id, nombre, direccion):
-    p = producto.query.filter_by(id=id).first()
+    p = usuario.query.filter_by(id=id).first()
     p.usuario_nombre = nombre
     p.usuario_direccion = direccion
     db.session.commit()
@@ -67,7 +67,7 @@ def actualizar(id, nombre, direccion):
 @app.route('/buscar/<int:id>')
 @cross_origin()
 def buscar(id):
-    d = producto.query.filter_by(id=id).first()
+    d = usuario.query.filter_by(id=id).first()
     p = { 
         'id': d.id,
         'nombre': d.usuario_nombre,
